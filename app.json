@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "LR Generator",
+    "slug": "lr-consignment-generator",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": { "backgroundColor": "#1B3A6B", "resizeMode": "contain" },
+    "assetBundlePatterns": ["**/*"],
+    "ios": { "supportsTablet": true },
+    "android": {
+      "package": "com.tanishlogistic.lrgenerator",
+      "adaptiveIcon": { "backgroundColor": "#1B3A6B" }
+    },
+    "web": { "bundler": "metro" }
+  }
+}

@@ -10,7 +10,7 @@ can use it without help.
 - Big checkbox-style options (Paid / To Pay / TBB, billing party, GSTIN paid by)
 - Saved LR list with delete; open any record for a clean preview
 - **PDF download / share** styled like the classic LR form (expo-print + expo-sharing)
-- Minimal UI: large fonts, 60px+ touch targets, high contrast, bilingual hints (English + Hindi)
+- Minimal UI: large fonts, 60px+ touch targets, high contrast, plain-English labels
 
 ## Run
 ```bash

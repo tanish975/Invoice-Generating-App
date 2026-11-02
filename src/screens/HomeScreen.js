@@ -7,24 +7,24 @@ export default function HomeScreen({ records, onNew, onOpen, onDelete }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>LR Generator</Text>
-      <Text style={styles.sub}>Consignment note banayein — aasaan aur tez</Text>
+      <Text style={styles.sub}>Create consignment notes — simple and fast</Text>
 
-      <BigButton title="＋  Naya LR Banayein" onPress={onNew} variant="primary" />
+      <BigButton title="＋  New LR" onPress={onNew} variant="primary" />
 
-      <Text style={styles.listHead}>Pichhle LR ({records.length})</Text>
+      <Text style={styles.listHead}>Saved LRs ({records.length})</Text>
       <FlatList
         data={records}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 30 }}
         ListEmptyComponent={
-          <Text style={styles.empty}>Abhi koi LR nahi bana. Upar button se shuru karein.</Text>
+          <Text style={styles.empty}>No LRs yet. Tap the button above to create one.</Text>
         }
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.card} onPress={() => onOpen(item)} activeOpacity={0.75}>
             <View style={{ flex: 1 }}>
               <Text style={styles.cn}>C.N. No: {item.cnNo}</Text>
               <Text style={styles.route}>{item.from} → {item.to}</Text>
-              <Text style={styles.party}>{item.consigneeName || "—"} ko {item.consignorName || "—"}</Text>
+              <Text style={styles.party}>{item.consignorName || "—"} → {item.consigneeName || "—"}</Text>
               <Text style={styles.date}>{item.bookingDate}</Text>
             </View>
             <TouchableOpacity style={styles.del} onPress={() => onDelete(item.id)}>

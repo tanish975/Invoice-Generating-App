@@ -13,7 +13,7 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri, { mimeType: "application/pdf", dialogTitle: `LR-${record.cnNo}.pdf` });
       } else {
-        Alert.alert("PDF taiyaar", uri);
+        Alert.alert("PDF ready", uri);
       }
     } catch (e) {
       Alert.alert("Error", String(e.message || e));
@@ -44,7 +44,7 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
       <View style={{ marginTop: 20 }}>
         <BigButton title="📄  PDF Download / Share" onPress={sharePdf} variant="primary" />
         <BigButton title="✏️  Edit" onPress={() => onEdit(r)} variant="dark" />
-        <BigButton title="←  Wapas (Home)" onPress={onBack} variant="light" />
+        <BigButton title="←  Back to Home" onPress={onBack} variant="light" />
       </View>
     </ScrollView>
   );

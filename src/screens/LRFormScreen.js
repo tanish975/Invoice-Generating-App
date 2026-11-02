@@ -8,7 +8,7 @@ const EMPTY = {
   cnNo: "", bookingDate: "", from: "", to: "", ewayBill: "",
   consignorName: "", consignorAddress: "", consignorGstin: "",
   consigneeName: "", consigneeAddress: "", consigneeGstin: "",
-  paymentMode: "To Pay", billingParty: "Consignee", gstinPaidBy: "Consignee",
+  paymentMode: "To Pay", billingParty: "Consignee", gstinPaidBy: ["Consignee"],
   truckNo: "", packages: "", goods: "", invoiceNo: "", declaredValue: "",
   nettWeight: "", grossWeight: "", freight: "", rate: "", insCh: "",
   stCh: "", serviceTax: "", cess: "", total: "", privateMark: "",
@@ -28,13 +28,13 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
 
   const valid = f.consignorName && f.consigneeName && f.from && f.to;
   const save = () => {
-    if (!valid) { Alert.alert("Zaroori details", "Consignor, Consignee, From aur To bharna zaroori hai."); return; }
+    if (!valid) { Alert.alert("Required fields", "Please fill Consignor, Consignee, From and To."); return; }
     onSave({ ...f, id: initial?.id || String(Date.now()), total: f.total || f.freight });
   };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
-      <Text style={styles.title}>{initial ? "LR Edit karein" : "Naya LR"}</Text>
+      <Text style={styles.title}>{initial ? "Edit LR" : "New LR"}</Text>
 
       <SectionTitle>Basic Details</SectionTitle>
       <View style={styles.row2}>
@@ -65,26 +65,34 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
           </View>
         ))}
       </View>
-      <Text style={styles.mini}>GSTIN Paid By</Text>
+      <Text style={styles.mini}>GSTIN Paid By (tick all that apply)</Text>
       <View style={styles.row2}>
-        {["Consignor", "Consignee", "Transport"].map((m) => (
+        {["Consignor", "Consignee", "Driver"].map((m) => (
           <View key={m} style={{ flex: 1, marginHorizontal: 3 }}>
-            <OptionRow label={m} selected={f.gstinPaidBy === m} onPress={() => setF((s) => ({ ...s, gstinPaidBy: m }))} />
+            <OptionRow
+              label={m}
+              selected={(f.gstinPaidBy || []).includes(m)}
+              onPress={() => setF((s) => {
+                const cur = Array.isArray(s.gstinPaidBy) ? s.gstinPaidBy : (s.gstinPaidBy ? [s.gstinPaidBy] : []);
+                const next = cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m];
+                return { ...s, gstinPaidBy: next };
+              })}
+            />
           </View>
         ))}
       </View>
 
-      <SectionTitle>Consignor (Bhejne wala)</SectionTitle>
+      <SectionTitle>Consignor (Sender)</SectionTitle>
       <Field label="Name *" value={f.consignorName} onChangeText={set("consignorName")} placeholder="Name" />
       <Field label="Address" value={f.consignorAddress} onChangeText={set("consignorAddress")} multiline placeholder="Address" />
       <Field label="GSTIN" value={f.consignorGstin} onChangeText={set("consignorGstin")} placeholder="24AAAAA0000A1Z5" />
 
-      <SectionTitle>Consignee (Paane wala)</SectionTitle>
+      <SectionTitle>Consignee (Receiver)</SectionTitle>
       <Field label="Name *" value={f.consigneeName} onChangeText={set("consigneeName")} placeholder="Name" />
       <Field label="Address" value={f.consigneeAddress} onChangeText={set("consigneeAddress")} multiline placeholder="Address" />
       <Field label="GSTIN" value={f.consigneeGstin} onChangeText={set("consigneeGstin")} placeholder="24AAAAA0000A1Z5" />
 
-      <SectionTitle>Goods (Samaan)</SectionTitle>
+      <SectionTitle>Goods (Cargo)</SectionTitle>
       <View style={styles.row2}>
         <View style={{ flex: 1, marginRight: 8 }}><Field label="No. of Package" value={f.packages} onChangeText={set("packages")} keyboardType="numeric" /></View>
         <View style={{ flex: 1 }}><Field label="Invoice No." value={f.invoiceNo} onChangeText={set("invoiceNo")} /></View>
@@ -96,7 +104,7 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
       </View>
       <Field label="Declared Value (Rs.)" value={f.declaredValue} onChangeText={set("declaredValue")} keyboardType="numeric" />
 
-      <SectionTitle>Freight & Charges (Bhaada)</SectionTitle>
+      <SectionTitle>Freight & Charges</SectionTitle>
       <View style={styles.row2}>
         <View style={{ flex: 1, marginRight: 8 }}><Field label="Freight Rs." value={f.freight} onChangeText={set("freight")} keyboardType="numeric" /></View>
         <View style={{ flex: 1 }}><Field label="TOTAL Rs." value={f.total} onChangeText={set("total")} keyboardType="numeric" /></View>

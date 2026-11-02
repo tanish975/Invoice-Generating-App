@@ -18,3 +18,19 @@ npm install
 npm start          # then press "w" for web preview or scan QR for Expo Go
 npm run android    # Android device/emulator
 ```
+
+## Get the app on your phone
+
+**Fastest (today):** install **Expo Go** from Play Store, then on your computer run
+`npm install && npm start` and scan the QR code with Expo Go.
+
+**Standalone APK:** on your computer run
+```bash
+npm install -g eas-cli && eas login
+npx eas build --platform android --profile preview
+```
+Download the `.apk` from the printed link onto your phone and install it.
+Then attach that APK to the GitHub release so it shows as a downloadable asset:
+```bash
+gh release upload v1.0.0 ./app.apk
+```

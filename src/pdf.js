@@ -60,7 +60,7 @@ export function lrSvg(r) {
     t(ackx + ackw / 2, ty + 17, "FOR ACKNOWLEDGEMENT", 8.5, 900, INK, "middle") + ackLines;
   // Private Mark / M.R. right columns
   const pmx = ackx + ackw;
-  const pm = box(pmx, ty, 50, bodyBottom - ty) + lbl(pmx + 25, ty + 14, "Private", 6) + lbl(pmx + 25, ty + 23, "Mark", 6) +
+  const pm = box(pmx, ty, 50, bodyBottom - ty) + lbl(pmx + 25, ty + 13, "Private", 5.5) + lbl(pmx + 25, ty + 21, "Mark", 5.5) +
              line(pmx, ty + hh, pmx + 50, ty + hh) + box(pmx, bodyBottom - 30, 50, 30) + lbl(pmx + 25, bodyBottom - 17, "M.R./Bill", 6) + lbl(pmx + 25, bodyBottom - 8, "No.", 6);
   // bottom row of table
   const by = bodyBottom, bh = 30;
@@ -108,14 +108,16 @@ export function lrSvg(r) {
     ${box(12, 128, 250, 132)}
     ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(18, 156, esc(r.consignorName || ""), 10, 700)}
     ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${t(18, 184, esc(r.consignorAddress || ""), 8)}
-    ${line(18, 200, 256, 200)}${line(18, 228, 256, 228)}${line(18, 248, 256, 248)}
-    ${lbl(18, 256, "GSTIN :")}${t(58, 256, esc(r.consignorGstin || ""), 8, 700)}
+    ${line(18, 200, 256, 200)}${line(18, 228, 256, 228)}
+    ${line(12, 240, 262, 240)}${line(58, 240, 58, 260)}
+    ${lbl(16, 254, "GSTIN :", 8)}${t(64, 254, esc(r.consignorGstin || ""), 9, 700)}
 
     ${box(268, 128, 250, 132)}
     ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(274, 156, esc(r.consigneeName || ""), 10, 700)}
     ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${t(274, 184, esc(r.consigneeAddress || ""), 8)}
-    ${line(274, 200, 512, 200)}${line(274, 228, 512, 228)}${line(274, 248, 512, 248)}
-    ${lbl(274, 256, "GSTIN :")}${t(314, 256, esc(r.consigneeGstin || ""), 8, 700)}
+    ${line(274, 200, 512, 200)}${line(274, 228, 512, 228)}
+    ${line(268, 240, 518, 240)}${line(314, 240, 314, 260)}
+    ${lbl(272, 254, "GSTIN :", 8)}${t(320, 254, esc(r.consigneeGstin || ""), 9, 700)}
 
     ${box(524, 128, 264, 132)}
     ${lbl(530, 148, "C.N. No :")}${t(782, 152, String(r.cnNo || ""), 20, 900, INK, "end")}
@@ -129,10 +131,10 @@ export function lrSvg(r) {
 
     <!-- ===== main acknowledgement table ===== -->
     ${headBoxes}${heads}${bodies}${charges}${ack}${pm}${bottomRow}
-    ${t(704, by + 10, "Not Responsible for leakage & Breakage", 5)}
-    ${t(704, by + 17, "Delivery against Payments.", 5)}
-    ${t(704, by + 24, "All Disputes Subject to MANDI", 5)}
-    ${t(704, by + 31, "GOBIND GARH Jurisdiction.", 5)}
+    ${t(702, by + 9, "Not Responsible for leakage & Breakage", 4.8)}
+    ${t(702, by + 16, "Delivery against Payments.", 4.8)}
+    ${t(702, by + 23, "All Disputes Subject to MANDI", 4.8)}
+    ${t(702, by + 30, "GOBIND GARH Jurisdiction.", 4.8)}
 
     <!-- ===== footer ===== -->
     ${line(12, 482, 788, 482)}

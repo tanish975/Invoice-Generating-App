@@ -29,7 +29,7 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
   const valid = f.consignorName && f.consigneeName && f.from && f.to;
   const save = () => {
     if (!valid) { Alert.alert("Required fields", "Please fill Consignor, Consignee, From and To."); return; }
-    onSave({ ...f, id: initial?.id || String(Date.now()), total: f.total || f.freight });
+    onSave({ ...f, id: initial?.id || String(Date.now()), total: f.total });
   };
 
   return (

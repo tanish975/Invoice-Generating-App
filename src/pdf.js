@@ -131,16 +131,16 @@ export function lrSvg(r) {
     <!-- ===== party + CN boxes ===== -->
     ${box(12, 128, 250, 132)}
     ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(72, 140, esc(r.consignorName || ""), fitSize(r.consignorName, 180, 10, 7), 700)}
-    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${wrapped(62, 168, r.consignorAddress, 8, 190, 44, 10)}
-    ${line(18, 200, 256, 200)}${line(18, 228, 256, 228)}
-    ${line(12, 240, 262, 240)}${line(58, 240, 58, 260)}
+    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${wrapped(62, 167, r.consignorAddress, 8, 190, 44, 10)}
+    
+    ${line(12, 236, 262, 236)}${line(58, 236, 58, 260)}
     ${lbl(16, 254, "GSTIN :", 8)}${t(64, 254, esc(r.consignorGstin || ""), 9, 700)}
 
     ${box(268, 128, 250, 132)}
     ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(332, 140, esc(r.consigneeName || ""), fitSize(r.consigneeName, 175, 10, 7), 700)}
-    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${wrapped(318, 168, r.consigneeAddress, 8, 190, 44, 10)}
-    ${line(274, 200, 512, 200)}${line(274, 228, 512, 228)}
-    ${line(268, 240, 518, 240)}${line(314, 240, 314, 260)}
+    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${wrapped(318, 167, r.consigneeAddress, 8, 190, 44, 10)}
+    
+    ${line(268, 236, 518, 236)}${line(314, 236, 314, 260)}
     ${lbl(272, 254, "GSTIN :", 8)}${t(320, 254, esc(r.consigneeGstin || ""), 9, 700)}
 
     ${box(524, 128, 264, 132)}
@@ -162,9 +162,9 @@ export function lrSvg(r) {
     ${t(16, 503, "the consignment is booked with full acknowledgement of the terms and condition of G.C Note appear on the reverse and Which I/we accept", 6.5)}
     ${t(16, 512, "Received the goods on terms & Condition printed overleaf.", 6.5)}
     ${t(16, 526, "PAYMENT MUST BE MADE BY ACCOUNT PAYEE CHEQUE OR DRAFT ONLY IN FAVOUR OF TANISH LOGISTIC", 7.5, 900)}
-    ${cb(400, 488, false)}${t(415, 497, "Consignor", 8)}
-    ${cb(400, 503, false)}${t(415, 512, "Consignee", 8)}
-    ${cb(400, 518, false)}${t(415, 527, "Driver", 8)}
+    ${cb(330, 488, false)}${t(345, 497, "Consignor", 8)}
+    ${cb(330, 503, false)}${t(345, 512, "Consignee", 8)}
+    ${cb(330, 518, false)}${t(345, 527, "Driver", 8)}
     ${t(660, 510, "For TANISH LOGISTIC", 11, 900, INK, "middle")}
     ${t(740, 548, "Booking Incharge", 9, 700, INK, "middle")}
   </svg>`;

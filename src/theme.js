@@ -24,3 +24,11 @@ export const font = {
 };
 
 export const touch = { min: 60 }; // minimum touch target height
+
+// Responsive scaling: adapts type/spacing to any phone screen (portrait locked).
+import { useWindowDimensions } from "react-native";
+export function useScale() {
+  const { width, height } = useWindowDimensions();
+  const base = Math.min(width, height);
+  return Math.max(0.85, Math.min(1.35, base / 400));
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet, Alert } from "react-native";
-import { colors, font } from "../theme";
+import { colors, font, useScale } from "../theme";
 import { BigButton, Field, OptionRow, SectionTitle } from "../components/ui";
 import { nextCNNo } from "../storage";
 
@@ -16,6 +16,7 @@ const EMPTY = {
 };
 
 export default function LRFormScreen({ initial, onSave, onCancel }) {
+  const k = useScale();
   const [f, setF] = useState(EMPTY);
   const set = (k) => (v) => setF((s) => ({ ...s, [k]: v }));
 
@@ -33,8 +34,8 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
-      <Text style={styles.title}>{initial ? "Edit LR" : "New LR"}</Text>
+    <ScrollView style={[styles.container, { padding: 20 * k, paddingTop: 54 * k }]} contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
+      <Text style={[styles.title, { fontSize: font.title * k }]}>{initial ? "Edit LR" : "New LR"}</Text>
 
       <SectionTitle>Basic Details</SectionTitle>
       <View style={styles.row2}>

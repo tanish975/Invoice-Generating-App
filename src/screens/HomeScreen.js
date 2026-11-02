@@ -1,12 +1,14 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { colors, font } from "../theme";
+import { colors, font, useScale } from "../theme";
 import { BigButton } from "../components/ui";
 
 export default function HomeScreen({ records, onNew, onOpen, onDelete }) {
+  const k = useScale();
+  const st = { container: [styles.container, { padding: 20 * k, paddingTop: 54 * k }], title: [styles.title, { fontSize: font.title * k }] };
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>LR Generator</Text>
+    <View style={st.container}>
+      <Text style={st.title}>LR Generator</Text>
       <Text style={styles.sub}>Create consignment notes — simple and fast</Text>
 
       <BigButton title="＋  New LR" onPress={onNew} variant="primary" />

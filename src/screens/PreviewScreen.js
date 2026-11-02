@@ -2,11 +2,12 @@ import React from "react";
 import { View, Text, ScrollView, StyleSheet, Alert, Platform } from "react-native";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { colors, font } from "../theme";
+import { colors, font, useScale } from "../theme";
 import { BigButton } from "../components/ui";
 import { lrHtml } from "../pdf";
 
 export default function PreviewScreen({ record, onBack, onEdit }) {
+  const k = useScale();
   const sharePdf = async () => {
     try {
       const { uri } = await Print.printToFileAsync({ html: lrHtml(record) });
@@ -28,7 +29,7 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
   );
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+    <ScrollView style={[styles.container, { padding: 20 * k, paddingTop: 54 * k }]} contentContainerStyle={{ paddingBottom: 40 }}>
       <View style={styles.stamp}>
         <Text style={styles.stampBrand}>TANISH LOGISTIC</Text>
         <Text style={styles.stampCn}>C.N. No: {r.cnNo}</Text>

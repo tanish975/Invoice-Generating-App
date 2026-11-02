@@ -18,6 +18,27 @@ export function lrSvg(r) {
   const t = (x, y, str, size = 10, w = 400, fill = INK, anchor = "start") =>
     `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w}" fill="${fill}" text-anchor="${anchor}">${esc(str)}</text>`;
   const lbl = (x, y, str, size = 8) => t(x, y, str, size, 700);
+  // data-adaptive helpers: wrap long text and shrink font to fit cells
+  const wrap = (str, maxChars) => {
+    const words = String(str || "").split(/\s+/).filter(Boolean);
+    const lines = []; let cur = "";
+    for (const w of words) {
+      if ((cur + " " + w).trim().length <= maxChars) cur = (cur + " " + w).trim();
+      else { if (cur) lines.push(cur); cur = w; }
+    }
+    if (cur) lines.push(cur);
+    return lines.length ? lines : [""];
+  };
+  const fitSize = (str, maxWidth, base, min = 5) => {
+    let size = base;
+    while (String(str || "").length * size * 0.52 > maxWidth && size > min) size -= 0.5;
+    return size;
+  };
+  const wrapped = (x, y, str, size, maxWidth, maxChars, lineH = null) => {
+    const lines = wrap(str, maxChars).slice(0, 8);
+    const lh = lineH || size + 2;
+    return lines.map((ln, i) => t(x, y + i * lh, ln, fitSize(ln, maxWidth, size), 400)).join("");
+  };
   const cb = (x, y, checked) =>
     `<rect x="${x}" y="${y}" width="11" height="11" fill="#fff" stroke="${INK}" stroke-width="1.4"/>` +
     (checked ? `<text x="${x + 1}" y="${y + 10}" font-size="11" font-weight="900" fill="${INK}">✓</text>` : "");
@@ -41,7 +62,7 @@ export function lrSvg(r) {
   const bodyBottom = 440;
   cx = tx;
   const bodies = cols.map((c) => {
-    const s = box(cx, ty + hh, c[2], bodyBottom - ty - hh) + t(cx + 3, ty + hh + 16, c[1] || "", 10, 700);
+    const s = box(cx, ty + hh, c[2], bodyBottom - ty - hh) + wrapped(cx + 3, ty + hh + 16, c[1], 10, c[2] - 6, Math.floor((c[2] - 6) / 5.2), 12);
     cx += c[2]; return s;
   }).join("");
   const chx = cx;                               // charges block x
@@ -71,7 +92,7 @@ export function lrSvg(r) {
     line(tx + 210, by, tx + 210, by + bh) +
     box(tx + 210, by, 110, bh) + lbl(tx + 214, by + 12, "Declared Value Rs.") + t(tx + 214, by + 25, r.declaredValue || "", 9, 700) +
     line(tx + 320, by, tx + 320, by + bh) +
-    box(tx + 320, by, 230, bh) + lbl(tx + 324, by + 12, "Delivery Inst.") + t(tx + 324, by + 25, r.deliveryInst || "", 8) +
+    box(tx + 320, by, 230, bh) + lbl(tx + 324, by + 12, "Delivery Inst.") + wrapped(tx + 324, by + 23, r.deliveryInst, 8, 220, 46, 9) +
     line(tx + 550, by, tx + 550, by + bh) + line(tx + 688, by, tx + 688, by + bh) +
     box(tx + 550, by, 138, bh) + lbl(tx + 554, by + 12, "Truck No.:") + t(tx + 554, by + 25, r.truckNo || "", 9, 700) +
     box(tx + 688, by, 88, bh) + t(tx + 692, by + 7, "Not Responsible for", 4.5) + t(tx + 692, by + 12.5, "leakage & Breakage.", 4.5) + t(tx + 692, by + 18, "Delivery against", 4.5) + t(tx + 692, by + 23.5, "Payments. Disputes:", 4.5) + t(tx + 692, by + 29, "MANDI GOBIND GARH", 4.5);
@@ -109,15 +130,15 @@ export function lrSvg(r) {
 
     <!-- ===== party + CN boxes ===== -->
     ${box(12, 128, 250, 132)}
-    ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(18, 156, esc(r.consignorName || ""), 10, 700)}
-    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${t(18, 184, esc(r.consignorAddress || ""), 8)}
+    ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(18, 156, esc(r.consignorName || ""), fitSize(r.consignorName, 180, 10, 7), 700)}
+    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${wrapped(18, 184, r.consignorAddress, 8, 235, 52, 10)}
     ${line(18, 200, 256, 200)}${line(18, 228, 256, 228)}
     ${line(12, 240, 262, 240)}${line(58, 240, 58, 260)}
     ${lbl(16, 254, "GSTIN :", 8)}${t(64, 254, esc(r.consignorGstin || ""), 9, 700)}
 
     ${box(268, 128, 250, 132)}
-    ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(274, 156, esc(r.consigneeName || ""), 10, 700)}
-    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${t(274, 184, esc(r.consigneeAddress || ""), 8)}
+    ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(274, 156, esc(r.consigneeName || ""), fitSize(r.consigneeName, 175, 10, 7), 700)}
+    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${wrapped(274, 184, r.consigneeAddress, 8, 232, 52, 10)}
     ${line(274, 200, 512, 200)}${line(274, 228, 512, 228)}
     ${line(268, 240, 518, 240)}${line(314, 240, 314, 260)}
     ${lbl(272, 254, "GSTIN :", 8)}${t(320, 254, esc(r.consigneeGstin || ""), 9, 700)}

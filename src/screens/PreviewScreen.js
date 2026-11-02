@@ -9,8 +9,26 @@ import { lrHtml } from "../pdf";
 export default function PreviewScreen({ record, onBack, onEdit }) {
   const k = useScale();
   const sharePdf = async () => {
+    const html = lrHtml(record);
     try {
-      const { uri } = await Print.printToFileAsync({ html: lrHtml(record) });
+      if (Platform.OS === "web") {
+        // Web preview: open the LR in a new tab and open the print dialog (Save as PDF)
+        const w = window.open("", "_blank");
+        if (w) {
+          w.document.write(html);
+          w.document.close();
+          setTimeout(() => { try { w.focus(); w.print(); } catch (_) {} }, 400);
+        } else {
+          const blob = new Blob([html], { type: "text/html" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = `LR-${record.cnNo || "draft"}.html`;
+          a.click();
+          URL.revokeObjectURL(a.href);
+        }
+        return;
+      }
+      const { uri } = await Print.printToFileAsync({ html });
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(uri, { mimeType: "application/pdf", dialogTitle: `LR-${record.cnNo}.pdf` });
       } else {

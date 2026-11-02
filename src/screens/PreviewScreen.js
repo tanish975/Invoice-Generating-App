@@ -21,6 +21,8 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
   };
 
   const r = record;
+  const cb = (on) => (on ? "☑" : "☐");
+  const gstinBy = Array.isArray(r.gstinPaidBy) ? r.gstinPaidBy : (r.gstinPaidBy ? [r.gstinPaidBy] : []);
   const line = (l, v) => (
     <View style={styles.line}><Text style={styles.lk}>{l}</Text><Text style={styles.lv}>{v || "—"}</Text></View>
   );
@@ -33,7 +35,12 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
       </View>
       {line("Booking Date", r.bookingDate)}
       {line("Route", `${r.from} → ${r.to}`)}
-      {line("Payment", `${r.paymentMode} • Bill: ${r.billingParty} • GSTIN: ${r.gstinPaidBy}`)}
+      <View style={styles.lineCol}>
+        <Text style={styles.lk}>To be billed at</Text>
+        <Text style={styles.chk}>{cb(r.paymentMode === "TBB")} TBB   {cb(r.paymentMode === "To Pay")} To Pay   {cb(r.paymentMode === "Paid")} Paid</Text>
+        <Text style={styles.chk}>Billing Party: {cb(r.billingParty === "Consignor")} Consignor  {cb(r.billingParty === "Consignee")} Consignee</Text>
+        <Text style={styles.chk}>GSTIN Paid by: {cb(gstinBy.includes("Consignor"))} Consignor  {cb(gstinBy.includes("Consignee"))} Consignee</Text>
+      </View>
       {line("Consignor", r.consignorName)}
       {line("Consignee", r.consigneeName)}
       {line("Goods", `${r.packages || "-"} pkg — ${r.goods || "-"}`)}
@@ -56,6 +63,8 @@ const styles = StyleSheet.create({
   stampBrand: { color: "#fff", fontSize: font.heading, fontWeight: "900", letterSpacing: 1 },
   stampCn: { color: colors.accent, fontSize: font.heading, fontWeight: "800", marginTop: 4 },
   line: { flexDirection: "row", backgroundColor: colors.card, borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: colors.border },
+  lineCol: { backgroundColor: colors.card, borderRadius: 12, padding: 14, marginBottom: 8, borderWidth: 1, borderColor: colors.border },
+  chk: { fontSize: font.body, fontWeight: "700", color: colors.text, marginTop: 4 },
   lk: { width: 150, fontSize: font.small, fontWeight: "700", color: colors.muted, textTransform: "uppercase" },
   lv: { flex: 1, fontSize: font.body, fontWeight: "700", color: colors.text },
 });

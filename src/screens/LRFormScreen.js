@@ -67,7 +67,7 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
       </View>
       <Text style={styles.mini}>GSTIN Paid By (tick all that apply)</Text>
       <View style={styles.row2}>
-        {["Consignor", "Consignee", "Driver"].map((m) => (
+        {["Consignor", "Consignee"].map((m) => (
           <View key={m} style={{ flex: 1, marginHorizontal: 3 }}>
             <OptionRow
               label={m}

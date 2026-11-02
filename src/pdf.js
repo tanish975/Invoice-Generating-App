@@ -63,7 +63,7 @@ export function lrHtml(r) {
       <div class="lbl" style="margin-top:3px;">Mode of Payment &nbsp; Billing Party</div>
       <div class="chkline">${box(r.billingParty === "Consignor")} Consignor &nbsp; ${box(r.billingParty === "Consignee")} Consignee</div>
       <div class="lbl" style="margin-top:3px;">GSTIN Paid by :</div>
-      <div class="chkline">${box(gstinPaidBy.includes("Consignor"))} Consignor &nbsp; ${box(gstinPaidBy.includes("Consignee"))} Consignee &nbsp; ${box(gstinPaidBy.includes("Driver"))} Driver</div>
+      <div class="chkline">${box(gstinPaidBy.includes("Consignor"))} Consignor &nbsp; ${box(gstinPaidBy.includes("Consignee"))} Consignee</div>
     </td>
     <td style="width:58%">
       <div class="risk">At Owner's Risk &nbsp;&nbsp; Eway Bill.: ${esc(r.ewayBill) || "—"}</div>

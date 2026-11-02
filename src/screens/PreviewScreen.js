@@ -13,7 +13,7 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
     if (!document.getElementById("lr-print-css")) {
       const st = document.createElement("style");
       st.id = "lr-print-css";
-      st.textContent = "@media print { body * { visibility: hidden !important; } #lr-print, #lr-print * { visibility: visible !important; } #lr-print { position: absolute; left: 0; top: 0; } @page { size: 210mm 148mm; margin: 0; } }";
+      st.textContent = "@media print { body * { visibility: hidden !important; } #lr-print, #lr-print * { visibility: visible !important; } #lr-print { display: block !important; position: absolute; left: 0; top: 0; } @page { size: 210mm 148mm; margin: 0; } }";
       document.head.appendChild(st);
     }
   }

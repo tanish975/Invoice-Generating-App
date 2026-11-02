@@ -162,9 +162,9 @@ export function lrSvg(r) {
     ${t(16, 503, "the consignment is booked with full acknowledgement of the terms and condition of G.C Note appear on the reverse and Which I/we accept", 6.5)}
     ${t(16, 512, "Received the goods on terms & Condition printed overleaf.", 6.5)}
     ${t(16, 526, "PAYMENT MUST BE MADE BY ACCOUNT PAYEE CHEQUE OR DRAFT ONLY IN FAVOUR OF TANISH LOGISTIC", 7.5, 900)}
-    ${cb(330, 488, false)}${t(345, 497, "Consignor", 8)}
-    ${cb(330, 503, false)}${t(345, 512, "Consignee", 8)}
-    ${cb(330, 518, false)}${t(345, 527, "Driver", 8)}
+    ${cb(500, 488, false)}${t(515, 497, "Consignor", 8)}
+    ${cb(500, 503, false)}${t(515, 512, "Consignee", 8)}
+    ${cb(500, 518, false)}${t(515, 527, "Driver", 8)}
     ${t(660, 510, "For TANISH LOGISTIC", 11, 900, INK, "middle")}
     ${t(740, 548, "Booking Incharge", 9, 700, INK, "middle")}
   </svg>`;

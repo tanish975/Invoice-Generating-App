@@ -36,6 +36,7 @@ export default function LRFormScreen({ initial, onSave, onCancel }) {
   return (
     <ScrollView style={[styles.container, { padding: 20 * k, paddingTop: 54 * k }]} contentContainerStyle={{ paddingBottom: 40 }} keyboardShouldPersistTaps="handled">
       <Text style={[styles.title, { fontSize: font.title * k }]}>{initial ? "Edit LR" : "New LR"}</Text>
+      <Text style={{ fontSize: font.small * k, color: colors.muted, marginBottom: 8 }}>Only Consignor, Consignee, From and To are required.</Text>
 
       <SectionTitle>Basic Details</SectionTitle>
       <View style={styles.row2}>

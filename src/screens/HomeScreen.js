@@ -12,6 +12,7 @@ export default function HomeScreen({ records, onNew, onOpen, onDelete }) {
       <Text style={styles.sub}>Create consignment notes — simple and fast</Text>
 
       <BigButton title="＋  New LR" onPress={onNew} variant="primary" />
+      <Text style={[styles.sub, { marginTop: 10, fontSize: font.body * k }]}>Tap a saved LR to view or print its PDF.</Text>
 
       <Text style={styles.listHead}>Saved LRs ({records.length})</Text>
       <FlatList

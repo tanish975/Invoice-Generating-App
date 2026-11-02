@@ -67,7 +67,7 @@ export function lrSvg(r) {
   }).join("");
   const chx = cx;                               // charges block x
   const chw = 84;                              // label+value width
-  const chRows = [["Ins. Ch.", r.insCh], ["St. Ch.", r.stCh], ["Service Tax", r.serviceTax], ["Cess", r.cess], ["TOTAL", r.total]];
+  const chRows = [["Ins. Ch.", r.insCh], ["St. Ch.", "100"], ["Service Tax", r.serviceTax], ["Cess", r.cess], ["TOTAL", r.total]];
   const rh = (bodyBottom - ty - hh) / 5;
   const charges = box(chx, ty + hh, chw, bodyBottom - ty - hh) + chRows.map((rw, i) => {
     const y = ty + hh + i * rh;

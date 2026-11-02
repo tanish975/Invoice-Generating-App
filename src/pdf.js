@@ -6,6 +6,8 @@ const esc = (s) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
   );
 
+import { LOGO_B64 } from "./logo";
+
 const W = 794, H = 559; // A5 landscape @96dpi
 const INK = "#000", BLUE = "#1B3A6B";
 
@@ -78,9 +80,9 @@ export function lrSvg(r) {
     <rect x="5" y="5" width="${W - 10}" height="${H - 10}" fill="#fff" stroke="${INK}" stroke-width="1.5"/>
 
     <!-- ===== header ===== -->
+    <defs><clipPath id="logoclip"><circle cx="52" cy="62" r="30"/></clipPath></defs>
+    <image x="20" y="30" width="64" height="64" clip-path="url(#logoclip)" href="${LOGO_B64}" preserveAspectRatio="xMidYMid slice"/>
     <circle cx="52" cy="62" r="30" fill="none" stroke="${BLUE}" stroke-width="2"/>
-    <circle cx="52" cy="62" r="24" fill="none" stroke="${BLUE}" stroke-width="1"/>
-    ${t(52, 58, "TANISH", 7, 900, BLUE, "middle")}${t(52, 68, "LOGISTIC", 7, 900, BLUE, "middle")}
     ${t(360, 24, "ॐ", 16, 700)}
     ${t(560, 24, "Mob.: 9924204744", 10, 700)}
     ${t(95, 62, "TANISH LOGISTIC", 38, 900, BLUE)}

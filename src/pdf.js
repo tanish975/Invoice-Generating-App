@@ -1,139 +1,154 @@
-// Exact replica of the paper TANISH LOGISTIC Lorry Receipt, drawn as a
-// self-contained vector SVG (pattern borrowed from cathrynlavery/diagram-design:
-// self-contained HTML+SVG, no shadows) so geometry is identical in every renderer.
-// Page = A5 portrait (148x210mm), like the LR book slip.
+// Exact replica of the paper TANISH LOGISTIC Lorry Receipt.
+// LANDSCAPE slip (A5 landscape, 210x148mm -> 794x559 units), drawn as a
+// self-contained vector SVG so geometry is identical in every renderer.
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
   );
 
-const W = 559, H = 794; // A5 @96dpi
+const W = 794, H = 559; // A5 landscape @96dpi
 const INK = "#000", BLUE = "#1B3A6B";
-
-const cb = (x, y, checked) =>
-  `<rect x="${x}" y="${y}" width="10" height="10" fill="#fff" stroke="${INK}" stroke-width="1.4"/>` +
-  (checked ? `<text x="${x + 1.5}" y="${y + 9}" font-size="10" font-weight="900" fill="${INK}">✓</text>` : "");
-
-const vtext = (x, y, str, size = 11, anchor = "middle") =>
-  `<text x="${x}" y="${y}" font-size="${size}" font-weight="800" fill="${INK}" text-anchor="${anchor}" transform="rotate(-90 ${x} ${y})" letter-spacing="1">${esc(str)}</text>`;
 
 export function lrSvg(r) {
   const paidBy = Array.isArray(r.gstinPaidBy) ? r.gstinPaidBy : (r.gstinPaidBy ? [r.gstinPaidBy] : []);
+  const box = (x, y, w, h, sw = 1) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="${INK}" stroke-width="${sw}"/>`;
   const line = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${INK}" stroke-width="1"/>`;
-  const box = (x, y, w, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="${INK}" stroke-width="1"/>`;
   const t = (x, y, str, size = 10, w = 400, fill = INK, anchor = "start") =>
     `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w}" fill="${fill}" text-anchor="${anchor}">${esc(str)}</text>`;
-  const lbl = (x, y, str, sz = 7) => t(x, y, str, sz, 700);
+  const lbl = (x, y, str, size = 8) => t(x, y, str, size, 700);
+  const cb = (x, y, checked) =>
+    `<rect x="${x}" y="${y}" width="11" height="11" fill="#fff" stroke="${INK}" stroke-width="1.4"/>` +
+    (checked ? `<text x="${x + 1}" y="${y + 10}" font-size="11" font-weight="900" fill="${INK}">✓</text>` : "");
 
-  // acknowledgement columns: [label, value, width]
-  const cols = [
-    ["No of Pakage", r.packages, 24], ["Nature of Goods (said to Consign)", r.goods, 66],
-    ["Nett Weight", r.nettWeight, 25], ["Gross Weight", r.grossWeight, 25], ["Rate", r.rate, 22],
-    ["Ins. Ch.", r.insCh, 19], ["St. Ch.", r.stCh, 19], ["Service Tax", r.serviceTax, 23],
-    ["Cess", r.cess, 19], ["TOTAL", r.total, 23], ["Freight Rs.", r.freight, 24],
-    ["Private Mark", r.privateMark, 24], ["M.R./Bill No.", r.mrBillNo, 24],
+  // main table geometry
+  const tx = 12, ty = 268, tw = 776;          // table x,y,width
+  const hh = 26;                                // header height
+  const cols = [                                // [label lines, value, width] for the 6 left columns
+    [["No of", "Pakage"], r.packages, 62], [["Nature of Goods", "(said to Consign)"], r.goods, 200],
+    [["Nett", "Weight"], r.nettWeight, 66], [["Gross", "Weight"], r.grossWeight, 66],
+    [["Rate"], r.rate, 58], [["Freight", "Rs."], r.freight, 64],
   ];
-  const ax = 196, ay = 148, aw = cols.reduce((s, c) => s + c[2], 0); // table x,y,width
-  const hh = 30, vh = 150;
-  let x = ax;
-  const headCells = cols.map((c) => {
-    const cell = box(x, ay, c[2], hh) + lbl(x + c[2] / 2, ay + 11, c[0].split(" ")[0]) + lbl(x + c[2] / 2, ay + 20, c[0].split(" ").slice(1).join(" ") || " ") ;
-    x += c[2]; return cell;
+  let cx = tx;
+  const headBoxes = cols.map((c) => { const s = box(cx, ty, c[2], hh); cx += c[2]; return s; }).join("");
+  cx = tx;
+  const heads = cols.map((c) => {
+    const s = headBoxes.length ? "" : "";
+    const lbls = lbl(cx + c[2] / 2, ty + 11, c[0][0], 7.5) + (c[0][1] ? lbl(cx + c[2] / 2, ty + 21, c[0][1], 7.5) : "");
+    cx += c[2]; return lbls;
   }).join("");
-  x = ax;
-  const valCells = cols.map((c) => {
-    const cell = box(x, ay + hh, c[2], vh) + t(x + 2, ay + hh + 14, c[1] || "", 10, 400);
-    x += c[2]; return cell;
+  const bodyBottom = 440;
+  cx = tx;
+  const bodies = cols.map((c) => {
+    const s = box(cx, ty + hh, c[2], bodyBottom - ty - hh) + t(cx + 3, ty + hh + 16, c[1] || "", 10, 700);
+    cx += c[2]; return s;
   }).join("");
+  const chx = cx;                               // charges block x
+  const chw = 84;                              // label+value width
+  const chRows = [["Ins. Ch.", r.insCh], ["St. Ch.", r.stCh], ["Service Tax", r.serviceTax], ["Cess", r.cess], ["TOTAL", r.total]];
+  const rh = (bodyBottom - ty - hh) / 5;
+  const charges = box(chx, ty + hh, chw, bodyBottom - ty - hh) + chRows.map((rw, i) => {
+    const y = ty + hh + i * rh;
+    return line(chx, y, chx + chw, y) + line(chx + 40, y, chx + 40, y + rh) +
+           lbl(chx + 3, y + rh - 6, rw[0], 7) + t(chx + 43, y + rh - 6, rw[1] || "", 8, 700);
+  }).join("");
+  const ackx = chx + chw;                       // acknowledgement area x
+  const ackw = 788 - ackx - 50;                // leave room for Private Mark / M.R. columns
+  let ackLines = "";
+  for (let y = ty + hh + 24; y < bodyBottom; y += 24) ackLines += line(ackx, y, ackx + ackw, y);
+  const ack = box(ackx, ty, ackw, bodyBottom - ty) +
+    `<rect x="${ackx}" y="${ty}" width="${ackw}" height="${hh}" fill="#dfe7f2" stroke="${INK}"/>` +
+    t(ackx + ackw / 2, ty + 17, "FOR ACKNOWLEDGEMENT", 8.5, 900, INK, "middle") + ackLines;
+  // Private Mark / M.R. right columns
+  const pmx = ackx + ackw;
+  const pm = box(pmx, ty, 50, bodyBottom - ty) + lbl(pmx + 25, ty + 14, "Private", 6) + lbl(pmx + 25, ty + 23, "Mark", 6) +
+             line(pmx, ty + hh, pmx + 50, ty + hh) + box(pmx, bodyBottom - 30, 50, 30) + lbl(pmx + 25, bodyBottom - 17, "M.R./Bill", 6) + lbl(pmx + 25, bodyBottom - 8, "No.", 6);
+  // bottom row of table
+  const by = bodyBottom, bh = 30;
+  const bottomRow =
+    box(tx, by, 210, bh) + lbl(tx + 4, by + 12, "Invoice No. / Stn.") + t(tx + 4, by + 25, r.invoiceNo || "", 9, 700) +
+    line(tx + 210, by, tx + 210, by + bh) +
+    box(tx + 210, by, 110, bh) + lbl(tx + 214, by + 12, "Declared Value Rs.") + t(tx + 214, by + 25, r.declaredValue || "", 9, 700) +
+    line(tx + 320, by, tx + 320, by + bh) +
+    box(tx + 320, by, 230, bh) + lbl(tx + 324, by + 12, "Delivery Inst.") + t(tx + 324, by + 25, r.deliveryInst || "", 8) +
+    line(tx + 550, by, tx + 550, by + bh) + line(tx + 700, by, tx + 700, by + bh) +
+    box(tx + 550, by, 150, bh) + lbl(tx + 554, by + 12, "Truck No.:") + t(tx + 554, by + 25, r.truckNo || "", 9, 700);
 
   return `
   <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="Helvetica, Arial, sans-serif">
-    <rect x="6" y="6" width="${W - 12}" height="${H - 12}" fill="#fff" stroke="${INK}" stroke-width="1.5"/>
+    <rect x="5" y="5" width="${W - 10}" height="${H - 10}" fill="#fff" stroke="${INK}" stroke-width="1.5"/>
 
     <!-- ===== header ===== -->
-    ${t(16, 26, "Mob.: 9924204744", 9, 700)}
-    ${t(16, 48, "ॐ", 16, 700)}
-    ${t(16, 92, "TANISH", 34, 900, BLUE)}
-    ${t(16, 128, "LOGISTIC", 34, 900, BLUE)}
-    ${t(16, 148, "H.O. : # No. 393 Street No. 10 Sec 2B Adrash Nagar Mandi Gobind Garh Dist. Fateh", 6.5)}
-    ${t(16, 157, "Garh Sahib, PB. 147301", 6.5)}
-    ${t(16, 168, "B.O. : 419, Valamhub Nr. Sidheshwar Harbor B/h Lilaji Hotel NH 8, Kapurai Chokdi", 6.5)}
-    ${t(16, 177, "Vadodara (GJ) Pin No. 390004", 6.5)}
-    ${t(16, 190, "GST No.: 03BAPPS3792D1ZG", 8, 700)}
+    <circle cx="52" cy="62" r="30" fill="none" stroke="${BLUE}" stroke-width="2"/>
+    <circle cx="52" cy="62" r="24" fill="none" stroke="${BLUE}" stroke-width="1"/>
+    ${t(52, 58, "TANISH", 7, 900, BLUE, "middle")}${t(52, 68, "LOGISTIC", 7, 900, BLUE, "middle")}
+    ${t(360, 24, "ॐ", 16, 700)}
+    ${t(560, 24, "Mob.: 9924204744", 10, 700)}
+    ${t(95, 62, "TANISH LOGISTIC", 38, 900, BLUE)}
+    ${t(95, 84, "H.O. : # No. 393 Street No. 10 Sec 2B Adrash Nagar Mandi Gobind Garh Dist. Fateh Garh Sahib, PB. 147301", 7)}
+    ${t(95, 94, "B.O. : 419, Valamhub Nr. Sidheshwar Harbor B/h Lilaji Hotel NH 8, Kapurai Chokdi Vadodara (GJ) Pin No. 390004", 7)}
+    ${line(12, 104, 540, 104)}
+    ${t(16, 118, "GST No.:  03BAPPS3792D1ZG", 9, 700)}
+    ${t(250, 118, "At Owner's Risk", 10, 800)}
+    ${t(370, 118, "Eway Bill.:", 9, 700)}${line(425, 116, 535, 116)}
 
-    <!-- billing box -->
-    ${box(268, 12, 150, 128)}
-    ${lbl(274, 24, "TO BE BILLED AT")}
-    ${lbl(274, 38, "MODE OF PAYMENT")}
-    ${cb(274, 42, r.paymentMode === "TBB")}${t(288, 51, "TBB", 9)}
-    ${cb(312, 42, r.paymentMode === "To Pay")}${t(326, 51, "To Pay", 9)}
-    ${cb(356, 42, r.paymentMode === "Paid")}${t(370, 51, "Paid", 9)}
-    ${lbl(274, 70, "BILLING PARTY")}
-    ${lbl(274, 88, "GSTIN PAID BY :")}
-    ${cb(274, 94, paidBy.includes("Consignor"))}${t(288, 103, "Consignor", 9)}
-    ${cb(340, 94, paidBy.includes("Consignee"))}${t(354, 103, "Consignee", 9)}
-    ${cb(274, 114, paidBy.includes("Transport"))}${t(288, 123, "Transport", 9)}
+    <!-- billing box (top right) -->
+    ${box(545, 10, 243, 94)}
+    ${lbl(551, 22, "To be Billed at")}
+    ${lbl(551, 36, "Mode of Payment")}
+    ${cb(551, 40, r.paymentMode === "TBB")}${t(566, 49, "TBB", 9)}
+    ${cb(600, 40, r.paymentMode === "To Pay")}${t(615, 49, "To Pay", 9)}
+    ${cb(655, 40, r.paymentMode === "Paid")}${t(670, 49, "Paid", 9)}
+    ${lbl(551, 64, "Billing Party")}${line(610, 62, 782, 62)}
+    ${lbl(551, 78, "GSTIN Paid by :")}
+    ${cb(551, 82, paidBy.includes("Consignor"))}${t(566, 91, "Consignor", 9)}
+    ${cb(625, 82, paidBy.includes("Consignee"))}${t(640, 91, "Consignee", 9)}
+    ${cb(710, 82, paidBy.includes("Transport"))}${t(725, 91, "Transport", 9)}
 
-    <!-- CN box -->
-    ${box(424, 12, 129, 128)}
-    ${lbl(430, 26, "C.N. No :")}${t(488, 30, String(r.cnNo || ""), 18, 900, INK, "end")}
-    ${line(430, 40, 547, 40)}
-    ${lbl(430, 54, "BOOKING DATE")}${t(547, 54, esc(r.bookingDate || ""), 8, 700, INK, "end")}
-    ${line(430, 66, 547, 66)}
-    ${lbl(430, 80, "FROM")}${t(547, 80, esc(r.from || ""), 8, 700, INK, "end")}
-    ${line(430, 92, 547, 92)}
-    ${lbl(430, 106, "TO")}${t(547, 106, esc(r.to || ""), 8, 700, INK, "end")}
-    ${line(430, 118, 547, 118)}
-    ${lbl(430, 132, "EWAY BILL:")}${t(547, 132, esc(r.ewayBill || ""), 7, 700, INK, "end")}
+    <!-- ===== party + CN boxes ===== -->
+    ${box(12, 128, 250, 132)}
+    ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(18, 156, esc(r.consignorName || ""), 10, 700)}
+    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${t(18, 184, esc(r.consignorAddress || ""), 8)}
+    ${line(18, 200, 256, 200)}${line(18, 228, 256, 228)}${line(18, 248, 256, 248)}
+    ${lbl(18, 256, "GSTIN :")}${t(58, 256, esc(r.consignorGstin || ""), 8, 700)}
 
-    <!-- ===== left column: parties ===== -->
-    ${box(12, 200, 170, 20)}
-    ${t(97, 213, "At Owner's Risk", 8.5, 800, INK, "middle")}
-    ${box(12, 224, 170, 252)}
-    ${lbl(16, 238, "CONSIGNOR")}${line(16, 242, 178, 242)}${t(16, 254, esc(r.consignorName || ""), 9, 700)}
-    ${lbl(16, 268, "ADDRESS")}${line(16, 272, 178, 272)}${t(16, 284, esc(r.consignorAddress || ""), 8)}
-    ${line(16, 300, 178, 300)}${line(16, 316, 178, 316)}
-    ${lbl(16, 330, "GSTIN :")}${t(52, 330, esc(r.consignorGstin || ""), 8, 700)}
-    ${line(16, 340, 178, 340)}
-    ${lbl(16, 354, "CONSIGNEE")}${line(16, 358, 178, 358)}${t(16, 370, esc(r.consigneeName || ""), 9, 700)}
-    ${lbl(16, 384, "ADDRESS")}${line(16, 388, 178, 388)}${t(16, 400, esc(r.consigneeAddress || ""), 8)}
-    ${line(16, 416, 178, 416)}${line(16, 432, 178, 432)}
-    ${lbl(16, 446, "GSTIN :")}${t(52, 446, esc(r.consigneeGstin || ""), 8, 700)}
+    ${box(268, 128, 250, 132)}
+    ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(274, 156, esc(r.consigneeName || ""), 10, 700)}
+    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${t(274, 184, esc(r.consigneeAddress || ""), 8)}
+    ${line(274, 200, 512, 200)}${line(274, 228, 512, 228)}${line(274, 248, 512, 248)}
+    ${lbl(274, 256, "GSTIN :")}${t(314, 256, esc(r.consigneeGstin || ""), 8, 700)}
 
-    <!-- ===== FOR ACKNOWLEDGEMENT table ===== -->
-    ${vtext(ax - 7, ay + hh + vh / 2, "FOR ACKNOWLEDGEMENT", 13)}
-    ${box(ax, ay, aw, hh + vh)}
-    ${headCells}${valCells}
-    ${line(ax, ay + hh, ax + aw, ay + hh)}
+    ${box(524, 128, 264, 132)}
+    ${lbl(530, 148, "C.N. No :")}${t(782, 152, String(r.cnNo || ""), 20, 900, INK, "end")}
+    ${line(530, 162, 782, 162)}
+    ${lbl(530, 178, "Booking Date")}${line(610, 176, 782, 176)}${t(782, 174, esc(r.bookingDate || ""), 8, 700, INK, "end")}
+    ${line(530, 194, 782, 194)}
+    ${lbl(530, 210, "From")}${line(570, 208, 782, 208)}${t(782, 206, esc(r.from || ""), 8, 700, INK, "end")}
+    ${line(530, 226, 782, 226)}
+    ${lbl(530, 242, "To")}${line(560, 240, 782, 240)}${t(782, 238, esc(r.to || ""), 8, 700, INK, "end")}
+    ${line(530, 254, 782, 254)}
 
-    <!-- charge row under table -->
-    ${box(ax, ay + hh + vh, aw, 56)}
-    ${lbl(ax + 4, ay + hh + vh + 12, "TRUCK NO.:")}${t(ax + 4, ay + hh + vh + 26, esc(r.truckNo || ""), 9, 700)}
-    ${line(ax + 90, ay + hh + vh, ax + 90, ay + hh + vh + 56)}
-    ${lbl(ax + 94, ay + hh + vh + 12, "DELIVERY INST.")}${t(ax + 94, ay + hh + vh + 26, esc(r.deliveryInst || ""), 8)}
-    ${line(ax + 190, ay + hh + vh, ax + 190, ay + hh + vh + 56)}
-    ${lbl(ax + 194, ay + hh + vh + 12, "INVOICE NO. / STN.")}${t(ax + 194, ay + hh + vh + 26, esc(r.invoiceNo || ""), 8)}
-    ${line(ax + 250, ay + hh + vh, ax + 250, ay + hh + vh + 56)}
-    ${lbl(ax + 254, ay + hh + vh + 12, "DECLARED VALUE RS.")}${t(ax + 254, ay + hh + vh + 26, esc(r.declaredValue || ""), 9, 700)}
-
-    <!-- ===== right edge vertical labels ===== -->
-    ${vtext(508, 190, "CONSIGNEE COPY", 10)}
-    ${vtext(524, 260, "For TANISH LOGISTIC", 10)}
-    ${vtext(540, 330, "Booking Incharge", 10)}
-    ${line(500, 148, 500, 384)}${line(516, 148, 516, 384)}${line(532, 148, 532, 384)}
+    <!-- ===== main acknowledgement table ===== -->
+    ${headBoxes}${heads}${bodies}${charges}${ack}${pm}${bottomRow}
+    ${t(704, by + 10, "Not Responsible for leakage & Breakage", 5)}
+    ${t(704, by + 17, "Delivery against Payments.", 5)}
+    ${t(704, by + 24, "All Disputes Subject to MANDI", 5)}
+    ${t(704, by + 31, "GOBIND GARH Jurisdiction.", 5)}
 
     <!-- ===== footer ===== -->
-    ${line(12, 720, 547, 720)}
-    ${t(16, 732, "We do hereby Certify that I/We subject ourselves / ourselves to the about particulars of goods Consigned by me/us are have been correct entered into and the consignment is booked with full acknowledgement of the", 6.5)}
-    ${t(16, 741, "terms and condition of G.C Note appear on the reverse and Which I/we accept Received the goods on terms & Condition printed overleaf.", 6.5)}
-    ${t(16, 752, "PAYMENT MUST BE MADE BY ACCOUNT PAYEE CHEQUE OR DRAFT ONLY IN FAVOUR OF TANISH LOGISTIC", 7, 900)}
-    ${t(16, 763, "Not Responsible for leakage & Breakage Delivery against Payments. All Disputes Subject to MANDI GOBIND GARH Jurisdiction.", 6.5)}
+    ${line(12, 482, 788, 482)}
+    ${t(16, 494, "We do hereby Certify that I/We subject ourselves / ourselves to the about particulars of goods Consigned by me/us are have been correct entered into and", 6.5)}
+    ${t(16, 503, "the consignment is booked with full acknowledgement of the terms and condition of G.C Note appear on the reverse and Which I/we accept", 6.5)}
+    ${t(16, 512, "Received the goods on terms & Condition printed overleaf.", 6.5)}
+    ${t(16, 526, "PAYMENT MUST BE MADE BY ACCOUNT PAYEE CHEQUE OR DRAFT ONLY IN FAVOUR OF TANISH LOGISTIC", 7.5, 900)}
+    ${t(470, 510, "CONSIGNEE COPY", 11, 900, INK, "middle")}
+    ${t(660, 510, "For TANISH LOGISTIC", 11, 900, INK, "middle")}
+    ${t(740, 548, "Booking Incharge", 9, 700, INK, "middle")}
   </svg>`;
 }
 
 export function lrHtml(r) {
   return `<html><head><meta charset="utf-8" /><style>
-    @page { size: 148mm 210mm; margin: 0; }
+    @page { size: 210mm 148mm; margin: 0; }
     body { margin:0; padding:0; }
     svg { display:block; }
   </style></head><body>${lrSvg(r)}</body></html>`;

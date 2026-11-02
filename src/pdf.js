@@ -166,6 +166,7 @@ export function lrSvg(r) {
     ${cb(500, 503, false)}${t(515, 512, "Consignee", 8)}
     ${cb(500, 518, false)}${t(515, 527, "Driver", 8)}
     ${t(660, 510, "For TANISH LOGISTIC", 11, 900, INK, "middle")}
+    <text x="655" y="540" font-size="14" font-style="italic" font-family="Brush Script MT, Segoe Script, cursive" fill="#1B3A6B" text-anchor="middle">Gajender Singh</text>
     ${t(740, 548, "Booking Incharge", 9, 700, INK, "middle")}
   </svg>`;
 }

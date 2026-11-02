@@ -143,7 +143,6 @@ export function lrSvg(r) {
     ${cb(400, 496, false)}${t(415, 505, "Consignor", 8)}
     ${cb(478, 496, false)}${t(493, 505, "Consignee", 8)}
     ${cb(556, 496, false)}${t(571, 505, "Driver", 8)}
-    ${t(495, 524, "CONSIGNEE COPY", 11, 900, INK, "middle")}
     ${t(660, 510, "For TANISH LOGISTIC", 11, 900, INK, "middle")}
     ${t(740, 548, "Booking Incharge", 9, 700, INK, "middle")}
   </svg>`;

@@ -14,7 +14,7 @@ const INK = "#000", BLUE = "#1B3A6B";
 export function lrSvg(r) {
   const paidBy = Array.isArray(r.gstinPaidBy) ? r.gstinPaidBy : (r.gstinPaidBy ? [r.gstinPaidBy] : []);
   const box = (x, y, w, h, sw = 1) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="${INK}" stroke-width="${sw}"/>`;
-  const line = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${INK}" stroke-width="1"/>`;
+  const line = (x1, y1, x2, y2, w = 1) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${INK}" stroke-width="${w}"/>`;
   const t = (x, y, str, size = 10, w = 400, fill = INK, anchor = "start") =>
     `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w}" fill="${fill}" text-anchor="${anchor}">${esc(str)}</text>`;
   const lbl = (x, y, str, size = 8) => t(x, y, str, size, 700);
@@ -130,28 +130,28 @@ export function lrSvg(r) {
 
     <!-- ===== party + CN boxes ===== -->
     ${box(12, 128, 250, 132)}
-    ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(72, 140, esc(r.consignorName || ""), fitSize(r.consignorName, 180, 10, 7), 700)}
-    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${wrapped(62, 167, r.consignorAddress, 8, 190, 44, 10)}
+    ${lbl(18, 144, "Consignor")}${line(70, 146, 256, 146)}${t(72, 141, esc(r.consignorName || ""), fitSize(r.consignorName, 180, 10, 7), 700)}
+    ${lbl(18, 172, "Address")}${line(60, 176, 256, 176)}${wrapped(62, 168, r.consignorAddress, 8, 190, 44, 10)}${line(18, 198, 256, 198)}
     
     ${line(12, 236, 262, 236)}${line(58, 236, 58, 260)}
     ${lbl(16, 254, "GSTIN :", 8)}${t(64, 254, esc(r.consignorGstin || ""), 9, 700)}
 
     ${box(268, 128, 250, 132)}
-    ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(332, 140, esc(r.consigneeName || ""), fitSize(r.consigneeName, 175, 10, 7), 700)}
-    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${wrapped(318, 167, r.consigneeAddress, 8, 190, 44, 10)}
+    ${lbl(274, 144, "Consignee")}${line(330, 146, 512, 146)}${t(332, 141, esc(r.consigneeName || ""), fitSize(r.consigneeName, 175, 10, 7), 700)}
+    ${lbl(274, 172, "Address")}${line(316, 176, 512, 176)}${wrapped(318, 168, r.consigneeAddress, 8, 190, 44, 10)}${line(274, 198, 512, 198)}
     
     ${line(268, 236, 518, 236)}${line(314, 236, 314, 260)}
     ${lbl(272, 254, "GSTIN :", 8)}${t(320, 254, esc(r.consigneeGstin || ""), 9, 700)}
 
     ${box(524, 128, 264, 132)}
-    ${lbl(530, 148, "C.N. No :")}${t(782, 152, String(r.cnNo || ""), 20, 900, INK, "end")}
-    ${line(530, 162, 782, 162)}
-    ${lbl(530, 178, "Booking Date")}${line(610, 176, 782, 176)}${t(780, 174, esc(r.bookingDate || ""), 8, 700, INK, "end")}
-    ${line(530, 194, 782, 194)}
-    ${lbl(530, 210, "From")}${line(570, 208, 782, 208)}${t(782, 206, esc(r.from || ""), 8, 700, INK, "end")}
-    ${line(530, 226, 782, 226)}
-    ${lbl(530, 242, "To")}${line(560, 240, 782, 240)}${t(782, 238, esc(r.to || ""), 8, 700, INK, "end")}
-    ${line(530, 254, 782, 254)}
+    ${lbl(530, 148, "C.N. No :")}${t(782, 158, String(r.cnNo || ""), 20, 900, INK, "end")}
+    ${line(530, 164, 782, 164)}
+    ${lbl(530, 178, "Booking Date")}${line(610, 180, 782, 180)}${t(780, 176, esc(r.bookingDate || ""), 8, 700, INK, "end")}
+    ${line(530, 196, 782, 196)}
+    ${lbl(530, 210, "From")}${line(570, 212, 782, 212)}${t(782, 208, esc(r.from || ""), 8, 700, INK, "end")}
+    ${line(530, 228, 782, 228)}
+    ${lbl(530, 242, "To")}${line(560, 244, 782, 244)}${t(782, 240, esc(r.to || ""), 8, 700, INK, "end")}
+    ${line(530, 256, 782, 256)}
 
     <!-- ===== main acknowledgement table ===== -->
     ${headBoxes}${heads}${bodies}${charges}${ack}${pm}${bottomRow}

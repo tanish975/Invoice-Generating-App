@@ -74,7 +74,7 @@ export function lrSvg(r) {
     box(tx + 320, by, 230, bh) + lbl(tx + 324, by + 12, "Delivery Inst.") + t(tx + 324, by + 25, r.deliveryInst || "", 8) +
     line(tx + 550, by, tx + 550, by + bh) + line(tx + 688, by, tx + 688, by + bh) +
     box(tx + 550, by, 138, bh) + lbl(tx + 554, by + 12, "Truck No.:") + t(tx + 554, by + 25, r.truckNo || "", 9, 700) +
-    box(tx + 688, by, 88, bh) + t(tx + 692, by + 8, "Not Responsible for", 4.5) + t(tx + 692, by + 14, "leakage & Breakage.", 4.5) + t(tx + 692, by + 20, "Delivery against", 4.5) + t(tx + 692, by + 26, "Payments. Disputes:", 4.5) + t(tx + 692, by + 32, "MANDI GOBIND GARH", 4.5);
+    box(tx + 688, by, 88, bh) + t(tx + 692, by + 7, "Not Responsible for", 4.5) + t(tx + 692, by + 12.5, "leakage & Breakage.", 4.5) + t(tx + 692, by + 18, "Delivery against", 4.5) + t(tx + 692, by + 23.5, "Payments. Disputes:", 4.5) + t(tx + 692, by + 29, "MANDI GOBIND GARH", 4.5);
 
   return `
   <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="Helvetica, Arial, sans-serif">

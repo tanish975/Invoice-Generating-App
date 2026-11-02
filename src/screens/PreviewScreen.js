@@ -4,28 +4,25 @@ import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
 import { colors, font, useScale } from "../theme";
 import { BigButton } from "../components/ui";
-import { lrHtml } from "../pdf";
+import { lrHtml, lrSvg } from "../pdf";
 
 export default function PreviewScreen({ record, onBack, onEdit }) {
   const k = useScale();
+  if (Platform.OS === "web") {
+    // eslint-disable-next-line no-undef
+    if (!document.getElementById("lr-print-css")) {
+      const st = document.createElement("style");
+      st.id = "lr-print-css";
+      st.textContent = "@media print { body * { visibility: hidden !important; } #lr-print, #lr-print * { visibility: visible !important; } #lr-print { position: absolute; left: 0; top: 0; } @page { size: 210mm 148mm; margin: 0; } }";
+      document.head.appendChild(st);
+    }
+  }
   const sharePdf = async () => {
     const html = lrHtml(record);
     try {
       if (Platform.OS === "web") {
-        // Web preview: open the LR in a new tab and open the print dialog (Save as PDF)
-        const w = window.open("", "_blank");
-        if (w) {
-          w.document.write(html);
-          w.document.close();
-          setTimeout(() => { try { w.focus(); w.print(); } catch (_) {} }, 400);
-        } else {
-          const blob = new Blob([html], { type: "text/html" });
-          const a = document.createElement("a");
-          a.href = URL.createObjectURL(blob);
-          a.download = `LR-${record.cnNo || "draft"}.html`;
-          a.click();
-          URL.revokeObjectURL(a.href);
-        }
+        // Inline-print: LR is already rendered hidden in the page; print CSS shows only it.
+        window.print();
         return;
       }
       const { uri } = await Print.printToFileAsync({ html });
@@ -72,6 +69,9 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
         <BigButton title="✏️  Edit" onPress={() => onEdit(r)} variant="dark" />
         <BigButton title="←  Back to Home" onPress={onBack} variant="light" />
       </View>
+      {Platform.OS === "web" && (
+        <div id="lr-print" style={{ display: "none" }} dangerouslySetInnerHTML={{ __html: lrSvg(record) }} />
+      )}
     </ScrollView>
   );
 }

@@ -105,7 +105,7 @@ export function lrSvg(r) {
     <defs><clipPath id="logoclip"><circle cx="52" cy="62" r="30"/></clipPath></defs>
     <image x="21" y="31" width="62" height="62" clip-path="url(#logoclip)" href="${LOGO_B64}" preserveAspectRatio="xMidYMid meet"/>
     <circle cx="52" cy="62" r="30" fill="none" stroke="${BLUE}" stroke-width="2"/>
-    ${t(360, 24, "ॐ", 16, 700)}
+    ${t(245, 24, "ॐ", 16, 700, INK, "middle")}
     ${t(560, 24, "Mob.: 9924204744", 10, 700)}
     ${t(95, 62, "TANISH LOGISTIC", 38, 900, BLUE)}
     ${t(95, 84, "H.O. : # No. 393 Street No. 10 Sec 2B Adrash Nagar Mandi Gobind Garh Dist. Fateh Garh Sahib, PB. 147301", 7)}
@@ -130,15 +130,15 @@ export function lrSvg(r) {
 
     <!-- ===== party + CN boxes ===== -->
     ${box(12, 128, 250, 132)}
-    ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(18, 156, esc(r.consignorName || ""), fitSize(r.consignorName, 180, 10, 7), 700)}
-    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${wrapped(18, 184, r.consignorAddress, 8, 235, 52, 10)}
+    ${lbl(18, 144, "Consignor")}${line(70, 142, 256, 142)}${t(72, 140, esc(r.consignorName || ""), fitSize(r.consignorName, 180, 10, 7), 700)}
+    ${lbl(18, 172, "Address")}${line(60, 170, 256, 170)}${wrapped(62, 168, r.consignorAddress, 8, 190, 44, 10)}
     ${line(18, 200, 256, 200)}${line(18, 228, 256, 228)}
     ${line(12, 240, 262, 240)}${line(58, 240, 58, 260)}
     ${lbl(16, 254, "GSTIN :", 8)}${t(64, 254, esc(r.consignorGstin || ""), 9, 700)}
 
     ${box(268, 128, 250, 132)}
-    ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(274, 156, esc(r.consigneeName || ""), fitSize(r.consigneeName, 175, 10, 7), 700)}
-    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${wrapped(274, 184, r.consigneeAddress, 8, 232, 52, 10)}
+    ${lbl(274, 144, "Consignee")}${line(330, 142, 512, 142)}${t(332, 140, esc(r.consigneeName || ""), fitSize(r.consigneeName, 175, 10, 7), 700)}
+    ${lbl(274, 172, "Address")}${line(316, 170, 512, 170)}${wrapped(318, 168, r.consigneeAddress, 8, 190, 44, 10)}
     ${line(274, 200, 512, 200)}${line(274, 228, 512, 228)}
     ${line(268, 240, 518, 240)}${line(314, 240, 314, 260)}
     ${lbl(272, 254, "GSTIN :", 8)}${t(320, 254, esc(r.consigneeGstin || ""), 9, 700)}
@@ -146,7 +146,7 @@ export function lrSvg(r) {
     ${box(524, 128, 264, 132)}
     ${lbl(530, 148, "C.N. No :")}${t(782, 152, String(r.cnNo || ""), 20, 900, INK, "end")}
     ${line(530, 162, 782, 162)}
-    ${lbl(530, 178, "Booking Date")}${line(610, 176, 782, 176)}${t(782, 174, esc(r.bookingDate || ""), 8, 700, INK, "end")}
+    ${lbl(530, 178, "Booking Date")}${line(610, 176, 782, 176)}${t(780, 174, esc(r.bookingDate || ""), 8, 700, INK, "end")}
     ${line(530, 194, 782, 194)}
     ${lbl(530, 210, "From")}${line(570, 208, 782, 208)}${t(782, 206, esc(r.from || ""), 8, 700, INK, "end")}
     ${line(530, 226, 782, 226)}
@@ -162,9 +162,9 @@ export function lrSvg(r) {
     ${t(16, 503, "the consignment is booked with full acknowledgement of the terms and condition of G.C Note appear on the reverse and Which I/we accept", 6.5)}
     ${t(16, 512, "Received the goods on terms & Condition printed overleaf.", 6.5)}
     ${t(16, 526, "PAYMENT MUST BE MADE BY ACCOUNT PAYEE CHEQUE OR DRAFT ONLY IN FAVOUR OF TANISH LOGISTIC", 7.5, 900)}
-    ${cb(400, 496, false)}${t(415, 505, "Consignor", 8)}
-    ${cb(478, 496, false)}${t(493, 505, "Consignee", 8)}
-    ${cb(556, 496, false)}${t(571, 505, "Driver", 8)}
+    ${cb(400, 488, false)}${t(415, 497, "Consignor", 8)}
+    ${cb(400, 503, false)}${t(415, 512, "Consignee", 8)}
+    ${cb(400, 518, false)}${t(415, 527, "Driver", 8)}
     ${t(660, 510, "For TANISH LOGISTIC", 11, 900, INK, "middle")}
     ${t(740, 548, "Booking Incharge", 9, 700, INK, "middle")}
   </svg>`;

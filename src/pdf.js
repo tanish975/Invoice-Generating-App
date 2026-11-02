@@ -72,8 +72,9 @@ export function lrSvg(r) {
     box(tx + 210, by, 110, bh) + lbl(tx + 214, by + 12, "Declared Value Rs.") + t(tx + 214, by + 25, r.declaredValue || "", 9, 700) +
     line(tx + 320, by, tx + 320, by + bh) +
     box(tx + 320, by, 230, bh) + lbl(tx + 324, by + 12, "Delivery Inst.") + t(tx + 324, by + 25, r.deliveryInst || "", 8) +
-    line(tx + 550, by, tx + 550, by + bh) + line(tx + 700, by, tx + 700, by + bh) +
-    box(tx + 550, by, 150, bh) + lbl(tx + 554, by + 12, "Truck No.:") + t(tx + 554, by + 25, r.truckNo || "", 9, 700);
+    line(tx + 550, by, tx + 550, by + bh) + line(tx + 688, by, tx + 688, by + bh) +
+    box(tx + 550, by, 138, bh) + lbl(tx + 554, by + 12, "Truck No.:") + t(tx + 554, by + 25, r.truckNo || "", 9, 700) +
+    box(tx + 688, by, 88, bh) + t(tx + 692, by + 8, "Not Responsible for", 4.5) + t(tx + 692, by + 14, "leakage & Breakage.", 4.5) + t(tx + 692, by + 20, "Delivery against", 4.5) + t(tx + 692, by + 26, "Payments. Disputes:", 4.5) + t(tx + 692, by + 32, "MANDI GOBIND GARH", 4.5);
 
   return `
   <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="Helvetica, Arial, sans-serif">
@@ -133,10 +134,6 @@ export function lrSvg(r) {
 
     <!-- ===== main acknowledgement table ===== -->
     ${headBoxes}${heads}${bodies}${charges}${ack}${pm}${bottomRow}
-    ${t(702, by + 9, "Not Responsible for leakage & Breakage", 4.8)}
-    ${t(702, by + 16, "Delivery against Payments.", 4.8)}
-    ${t(702, by + 23, "All Disputes Subject to MANDI", 4.8)}
-    ${t(702, by + 30, "GOBIND GARH Jurisdiction.", 4.8)}
 
     <!-- ===== footer ===== -->
     ${line(12, 482, 788, 482)}

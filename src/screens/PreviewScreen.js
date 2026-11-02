@@ -8,12 +8,24 @@ import { lrHtml, lrSvg } from "../pdf";
 
 export default function PreviewScreen({ record, onBack, onEdit }) {
   const k = useScale();
+  React.useEffect(() => {
+    if (Platform.OS !== "web") return;
+    // eslint-disable-next-line no-undef
+    let el = document.getElementById("lr-print");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "lr-print";
+      document.body.appendChild(el);
+    }
+    el.innerHTML = lrSvg(record);
+    return () => { el.innerHTML = ""; };
+  }, [record]);
   if (Platform.OS === "web") {
     // eslint-disable-next-line no-undef
     if (!document.getElementById("lr-print-css")) {
       const st = document.createElement("style");
       st.id = "lr-print-css";
-      st.textContent = "@media print { body * { visibility: hidden !important; } #lr-print, #lr-print * { visibility: visible !important; } #lr-print { display: block !important; position: absolute; left: 0; top: 0; } @page { size: 210mm 148mm; margin: 0; } #lr-print svg { width: 210mm !important; height: 148mm !important; display: block; } }";
+      st.textContent = "@media print { body * { visibility: hidden !important; } #lr-print, #lr-print * { visibility: visible !important; } #lr-print { display: block !important; position: fixed !important; left: 0 !important; top: 0 !important; margin: 0 !important; padding: 0 !important; } #lr-print svg { width: 210mm !important; height: 148mm !important; display: block; } } @page { size: 210mm 148mm; margin: 0; }";
       document.head.appendChild(st);
     }
   }
@@ -69,9 +81,6 @@ export default function PreviewScreen({ record, onBack, onEdit }) {
         <BigButton title="✏️  Edit" onPress={() => onEdit(r)} variant="dark" />
         <BigButton title="←  Back to Home" onPress={onBack} variant="light" />
       </View>
-      {Platform.OS === "web" && (
-        <div id="lr-print" style={{ display: "none" }} dangerouslySetInnerHTML={{ __html: lrSvg(record) }} />
-      )}
     </ScrollView>
   );
 }
